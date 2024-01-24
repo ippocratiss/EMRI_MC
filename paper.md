@@ -20,7 +20,7 @@ affiliations:
  - name: LUTH, Laboratoire Univers et Théories, Observatoire de Paris, CNRS, Université PSL, Université Paris Cité, 5 place Jules Janssen, 92190 Meudon, France
    index: 2
 date: 18 December 2023
-bibliography: BiblioEMRI_Cosmo.bib
+bibliography: paper.bib
 
 
 # Summary
