@@ -234,5 +234,5 @@ We are indebted to Stéphane Ilić for collaboration on an early stage of the pr
 
 ![An example corner plot from an MCMC exploration with fiducial/injected values $M = 10^6 M_{\odot}$ (central mass), $\mu=10 M_{\odot}$ (orbiting mass), $S/M^2 = 0.1$ (dimensionless spin of the central black hole), $\Xi_0 =1$ (no modified GR effects; see Eq.~\autoref{eq:Xi}), $2000$ steps and $8$ walkers. We have assumed an observation of one year. Median and $ 90 \%$ C.I. are $M/(10^6 M_{\odot}) = 1.28^{+0.148}_{- 0.2604} $, $\mu/M_{\odot} = 10.0000021^{+0.0000010}_{- 0.0000019}$, $S/M^2 = 0.1000010^{+0.0000005}_{- 0.0000009}$, and $\Xi= 1.1685571^{+0.1043108}_{- 0.1965527}$. We have assumed that the distance (redshift) to the source is known, and equal to $1$ Gpc. The constraints are somewhat tighter than those in the literature [@Babak:2017tow], as our MCMC exploration covers a smaller EMRIs' parameter space. The eccentricity and the orbital angles at LSO have been kept fixed in the MCMC run. We have used the LISA noise model of [@Barack:2003fp]. \label{fig:corner}](cornerXi0=1.png)
 
-
+# References
 
