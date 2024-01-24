@@ -88,9 +88,9 @@ where it is understood that $A = A({\bf Y}(t), \boldsymbol{\theta})$. The polari
 **Waveform propagation:** Assuming a plane GW travelling far away from the source through the cosmological medium, we can write
 Eq. \autoref{eq:waveform} as $h_{ij}(t) = h(t) e_{ij}$, and expand the amplitude of each mode of the wave in Fourier modes with spatial wavenumber $k$ as 
 
-\begin{aligned} \label{eq:GWpropagation}
+\begin{equation} \label{eq:GWpropagation}
 \ddot{h} + 3H(\tau)(2 + \alpha_{\text{M}}) \dot{h} + k^2 (1 + \alpha_{\text{T}}) h = 0.
-\end{aligned}
+\end{equation}
 
 $H(\tau)$ is the Hubble parameter, $\tau$ the cosmological time, and the quantities
 $\alpha_{\text{M}}, \alpha_{\text{T}}$ parameterise effects beyond General Relativity modifying the friction and the wave's propagation speed respectively
@@ -98,29 +98,29 @@ $\alpha_{\text{M}}, \alpha_{\text{T}}$ parameterise effects beyond General Relat
 In redshift domain, and under the WKB approximation, one can solve analytically
 Eq. \autoref{eq:GWpropagation} to find [@Nishizawa:2017nef]
 
-\begin{aligned}\label{eq:GWpropagation-solution}
+\begin{equation}\label{eq:GWpropagation-solution}
 h(z) = h_{\text{MG}} \times h_{\text{GR}} \equiv \frac{1}{\Xi} \times e^{-ik \Delta T} \times h_{\text{GR}},
-\end{aligned}
+\end{equation}
 
 with 
 
-\begin{aligned}
+\begin{equation}
 \Xi(z) \equiv \frac{d^{\text{GW}}(z)}{d^{\text{EM}}(z)} \exp \left( \frac{1}{2}\int_{0}^{z} d\tilde{z} \frac{\alpha_{\text{M}}(\tilde{z})}{1+\tilde{z}}  \right), \; \; \; \;  \Delta T \equiv \exp \left(- i k  \int_{0}^{z} d\tilde{z}  \frac{\alpha_{\text{T}}(\tilde{z})}{1+\tilde{z}}\right),
-\end{aligned}
+\end{equation}
 
 $z$ the redshift to the source, and $h_{\text{GR}}$ the contribution one gets from solving Eq. \autoref{eq:GWpropagation} for $\alpha_{\text{M}} = 0 = \alpha_{\text{T}}$. The possible cosmological evolution of $\alpha_{\text{M}}(z), \alpha_{\text{T}}(z)$ is model-dependent, however, they are in principle very slowly-varying functions of redshift, tracing the evolution of the dark energy density fraction. For a discussion on parametrisations of their time dependence we refer to [@Bellini:2014fua]. For the sake of an example, we choose to parametrise $\Xi(z)$ through the physically well-motivated parametrisation of [@Belgacem:2018] (see also [@Matos:2022uew])
 
-\begin{aligned} \label{eq:Xi}
+\begin{equation} \label{eq:Xi}
 \Xi(z) = \Xi_0 + \frac{1- \Xi_0}{(1+z)^n},
-\end{aligned}
+\end{equation}
 
 with $\Xi_0$ a free parameter. Of course, any other physically-motivated parametrisation is equally good. There are
 scenarios where the parameters $\alpha_\text{M}$ and $\alpha_\text{T}$ are also frequency-dependent quantities (see e.g
 [@LISACosmologyWorkingGroup:2022wjo] for a detailed exploration) as
 
-\begin{aligned}
+\begin{equation}
 \alpha_{\text{M}} = F(z, f), \; \; \alpha_{\text{T}} = G(z, f) ,
-\end{aligned}
+\end{equation}
 
 with $F, G$ some well-motivated functions of GW frequency ($f$) and redshift ($z$). An example includes a power series
 expansion $~ \sum_{n} a_{n}(z)\left(f/f_{ * }\right)^{n}$. 
