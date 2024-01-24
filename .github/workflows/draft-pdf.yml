@@ -21,4 +21,4 @@ jobs:
           # PDF. Note, this should be the same directory as the input
           # paper.md
           path: paper.pdf
-       bibliography: BiblioEMRI_Cosmo.bib
+    bibliography: BiblioEMRI_Cosmo.bib
