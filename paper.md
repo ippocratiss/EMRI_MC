@@ -1,5 +1,5 @@
 ---
-title: 'EMRI_MC: A GPU-based code for Bayesian inference of EMRI waveforms'
+title: 'EMRI_MC: A GPU-based code for Bayesian inference of EMRI waveforms' 
 tags:
   - Gravitational Waves
   - EMRI
