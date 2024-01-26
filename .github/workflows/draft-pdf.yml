@@ -2,7 +2,7 @@ on: [push]
 
 jobs:
   paper:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest 
     name: Paper Draft
     steps:
       - name: Checkout
