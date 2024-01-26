@@ -212,8 +212,24 @@ Surely the current implementation of this code can be expanded in different inte
 We are indebted to Stéphane Ilić for collaboration on an early stage of the project, for his critical advice on MCMC simulations, and for his comments on the final version of the draft. We also thank Leor Barack, George Loukes-Gerakopoulos, Simone Mastrogiovanni, Adam Pound and Nick Stergioulas for discussions. The work of R.O. is supported by the Région Île-de-France within the DIM ACAV+ project SYMONGRAV (Symétries asymptotiques et ondes gravitationnelles). I.D.S. acknowledges funding by the Czech Grant Agency (GA\^CR) under the grant number 21-16583M. He also acknowledges the warm hospitality of R.O at the Observatory of Paris in November 2022, when the project was initiated. We acknowledge the use of the computer cluster at CEICO/FZU where the code was tested, and warmly thank its administrator Josef Dvořáček for his helpful input on GPU optimisation, and the use of the "Phoebe" computer cluster.
 
 
-
-
+:::: {.center data-latex=""} 
+::: {.minipage data-latex="{0.33\textwidth}"}
+![\label{fig:1a}](spin0_eLSO0.pdf)
+![\label{fig:1b}](spin0_eLSO0.3.pdf)
+![\label{fig:1c}](spin0_eLSO0.6.pdf)
+:::
+::: {.minipage data-latex="{0.33\textwidth}"}
+![\label{fig:2a}](spin0.4_eLSO0.pdf)
+![\label{fig:2b}](spin0.4_eLSO0.3.pdf)
+![\label{fig:2c}](spin0.4_eLSO0.6.pdf)
+:::
+::: {.minipage data-latex="{0.33\textwidth}"}
+![\label{fig:3a}](spin0.8_eLSO0.pdf)
+![\label{fig:3b}](spin0.8_eLSO0.3.pdf)
+![\label{fig:3c}](spin0.8_eLSO0.6.pdf)
+:::
+<figcaption> The kludge waveform computed for the last hour before the plunge at the Last Stable Orbit (LSO). Parameters: $M = 10^6 M_{\odot}$ (central mass), $\mu=10 M_{\odot}$ (orbiting mass), $(\theta_S, \phi_S) = (\pi/4, 0)$, $(\theta_K, \phi_K) = (\pi/8, 0)$, $\lambda = \pi/6$ (frame angles), $D= 1$ Gpc (distance to the source). First row: $S/M^2 = 0$ (dimensionless spin of the central black hole), $e_{\text{LSO}}= 0, 0.3, 0.6$ (eccentricity). Second row:  $S/M^2 = 0.4$, $e_{\text{LSO}}= 0, 0.3, 0.6$. Third row: $S/M^2 = 0.8$, $e_{\text{LSO}}= 0, 0.3, 0.6$.<figcaption> \label{fig:waveforms}
+::::
 
 ![An example corner plot from an MCMC exploration with fiducial/injected values $M = 10^6 M_{\odot}$ (central mass), $\mu=10 M_{\odot}$ (orbiting mass), $S/M^2 = 0.1$ (dimensionless spin of the central black hole), $\Xi_0 =1$ (no modified GR effects; see Eq.~\autoref{eq:Xi}), $2000$ steps and $8$ walkers. We have assumed an observation of one year. Median and $ 90 \%$ C.I. are $M/(10^6 M_{\odot}) = 1.28^{+0.148}_{- 0.2604} $, $\mu/M_{\odot} = 10.0000021^{+0.0000010}_{- 0.0000019}$, $S/M^2 = 0.1000010^{+0.0000005}_{- 0.0000009}$, and $\Xi= 1.1685571^{+0.1043108}_{- 0.1965527}$. We have assumed that the distance (redshift) to the source is known, and equal to $1$ Gpc. The constraints are somewhat tighter than those in the literature [@Babak:2017tow], as our MCMC exploration covers a smaller EMRIs' parameter space. The eccentricity and the orbital angles at LSO have been kept fixed in the MCMC run. We have used the LISA noise model of [@Barack:2003fp]. \label{fig:corner}](cornerXi0=1.png)
 
