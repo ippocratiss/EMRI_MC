@@ -14,13 +14,16 @@ module load CUDA/12.2.0
 
 ### Create venv
 
-`python3.11 -m venv ~/.venvs/EMRI_MC`
+...and install recent `pip`..
 
-### Activate venv
+```
+python3.11 -m venv ~/.venvs/EMRI_MC
+pip install --upgrade pip
+```
+
+### Activate venv and install code dependencies
 
 `source ~/.venvs/EMRI_MC/bin/activate`
-
-### Install code dependencies
 
 #WIP, so far exact list of dependencies in unclear.
 
