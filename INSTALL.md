@@ -26,7 +26,7 @@ module load CUDA/12.2.0
 
 note: install step `Running setup.py install for cupy ...` can take long time.
 
-`pip install cupy emcee seaborn matplotlib pandas numpy emcee IPython ipykernel scipy`
+`pip install cupy emcee seaborn matplotlib pandas numpy emcee IPython ipykernel scipy h5py`
 
 # Notes
 
