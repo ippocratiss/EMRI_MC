@@ -1,10 +1,10 @@
 # Manual Installation of EMRI_MC using Python venv
 
-## environment preparation
+## Runtime environment preparation
 
 Python - code was tested with #FIXME! python3.11. Make sure development package for given python version is installed too. Eg. at EL-like linux distros, `dnf install python3.11-devel`.
 
-### ensure CUDA is present
+### Ensure CUDA is present
 
 eg. at cluster environments, load CUDA toolkit. [^1]
 
@@ -25,9 +25,6 @@ module load CUDA/12.2.0
 work in progress, so far exact list of dependencies in unclear.
 
 `pip install cupy emcee corner`
-
-
-
 
 # Notes
 
