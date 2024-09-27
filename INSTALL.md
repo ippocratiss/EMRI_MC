@@ -24,7 +24,7 @@ module load CUDA/12.2.0
 
 #WIP, so far exact list of dependencies in unclear.
 
-`pip install cupy emcee corner`
+`pip install cupy emcee seaborn matplotlib pandas numpy emcee`
 
 # Notes
 
