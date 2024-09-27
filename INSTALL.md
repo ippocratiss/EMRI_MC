@@ -22,7 +22,7 @@ module load CUDA/12.2.0
 
 ### Install cupy and required packages into it
 
-work in progress, so far exact list of dependencies in unclear.
+#WIP, so far exact list of dependencies in unclear.
 
 `pip install cupy emcee corner`
 
