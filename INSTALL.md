@@ -20,13 +20,13 @@ module load CUDA/12.2.0
 
 `source ~/.venvs/EMRI_MC/bin/activate`
 
-### Install cupy and required packages into it
+### Install code dependencies
 
 #WIP, so far exact list of dependencies in unclear.
 
 note: install step `Running setup.py install for cupy ...` can take long time.
 
-`pip install cupy emcee seaborn matplotlib pandas numpy emcee`
+`pip install cupy emcee seaborn matplotlib pandas numpy emcee IPython`
 
 # Notes
 
