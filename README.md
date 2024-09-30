@@ -8,16 +8,9 @@ On top of Python's usual **numpy** and **scipy** libraries, to run the code one 
 
 1. **cuda/cupy**: https://nvidia.github.io/cuda-python/install.html
 
-
-
 2. **emcee**: https://emcee.readthedocs.io/en/stable/user/install/
 
-
-
-3. **multiprocessing**: https://pypi.org/project/multiprocessing/
-
-
-4. **corner** or **seaborn** or anything similar: https://corner.readthedocs.io/en/latest/install/  https://seaborn.pydata.org/installing.html
+3. **corner** or **seaborn** or anything similar: https://corner.readthedocs.io/en/latest/install/  https://seaborn.pydata.org/installing.html
 
 The cuda/cupy library provides the GPU functionality, emcee is the library with the MCMC sampler, multiprocessing is needed for parallelisation, and the corner/seaborn for producing the corner plots. 
 
