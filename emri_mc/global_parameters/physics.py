@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 ####################################################################################
 # This module defines neccesary definitions of global parameters and initial conditions.
 # The quantities in this module are kept fixed throughout the computation and are not varied in the MCMC run.
@@ -16,20 +13,8 @@
 
 ###### Libraries
 import numpy as np
-import math
-class color: # useful for printing out text in colour.
-    PURPLE    = '\033[1;35;48m'
-    CYAN      = '\033[1;36;48m'
-    BOLD      = '\033[1;37;48m'
-    BLUE      = '\033[1;34;48m'
-    GREEN     = '\033[1;32;48m'
-    YELLOW    = '\033[1;33;48m'
-    RED       = '\033[1;31;48m'
-    BLACK     = '\033[1;30;48m'
-    UNDERLINE = '\033[4;37;48m'
-    END       = '\033[1;37;0m'
-###### 
-    
+######
+
 
 ###### Physical constants in cgs units.
 Ms = 1.9892*10**(33)   # Solar mass, cgs

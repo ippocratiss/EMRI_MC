@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from global_parameters import *  # import parameter values 
-from waveform import *           # import kludge equations and ODE solvers
-from propagation import *        # import GW propagation functions
+import emri_mc.global_parameters.physics as g   # import global parameters and initial conditions
+import emri_mc.waveform as wf                   # import kludge equations and ODE solvers
+import emri_mc.propagation as prop
+
+#from propagation import *        # import GW propagation functions
+
 import numpy as np
 import cupy as cp 
-import emcee                     # MC package
-import multiprocessing           # parallelisation 
-from multiprocessing import Pool # parallelisation 
 
 
 # Definition of the prior. We choose a flat prior.
@@ -17,27 +17,27 @@ def lnprior(p):
     """
     Defines the log-prior.
 
-Parameters
-----------
-p : 1D array, parameter values, p = [M, μ, spin, ...]
+    Parameters
+    ----------
+    p : 1D array, parameter values, p = [M, μ, spin, ...]
 
-Returns
--------
-real, log(prior)
-    """  
-    x, y, z, w = p 
-# x: mass M, y: mass μ, z: spin S, w: Xi. 'Xi' is an example modified gravity parameter we use 
-# (see 'propagation.py' for its definition). 
-    if ( 
-                    10**5  <= x <=   10**7 
-        and             1  <= y <=   100
-        and             0  <= z <=   1.0
-        and          -100  <= w <= 100
-        ):              
-        return 0   
+    Returns
+    -------
+    real, log(prior)
+    """
+    x, y, z, w = p
+    # x: mass M, y: mass μ, z: spin S, w: Xi. 'Xi' is an example modified gravity parameter we use
+    # (see 'propagation.py' for its definition).
+    if (
+        10**5 <= x <= 10**7
+        and 1 <= y <= 100
+        and 0 <= z <= 1.0
+        and -100 <= w <= 100
+    ):
+        return 0
     else:
-                return -np.inf
-########### 
+        return -np.inf
+###########
 
 
 # Definition of the log-likelihood. By construction, it is infinite outside the margins of our parameter space.
@@ -46,20 +46,20 @@ def lnprob(p):
     """
     Defines the log-posterior probability function for the MCMC run. 
 
-Parameters
-----------
-p : 1D array, parameter values, p = [M, μ, spin, ...]
+    Parameters
+    ----------
+    p : 1D array, parameter values, p = [M, μ, spin, ...]
 
-Returns
--------
-real, log(prior) + log(likelihood) 
+    Returns
+    -------
+    real, log(prior) + log(likelihood) 
     """   
     x, y, z, w     = p                            # Change this vector of parameters if needed.
-    fiducial_model = compute_fiducial(x0,p0)      # This is needed to evaluate the function iterate_mcmc()
+    fiducial_model = wf.compute_fiducial(g.x0,g.p0)      # This is needed to evaluate the function iterate_mcmc()
     #print('[', p[0],',',p[1],',',p[2], ',' ,']') # Prints out the chosen parameters at each MCMC step.
     if not np.isfinite(lnprior(p)):               # Check prior's boundaries 
         return -np.inf
-    return lnprior(p) + iterate_mcmc(x0, p, fiducial_model) # returns log(prob) = ln(prior) + ln(likelihood)
+    return lnprior(p) + iterate_mcmc(g.x0, p, fiducial_model) # returns log(prob) = ln(prior) + ln(likelihood)
 ################## 
 
 
@@ -121,15 +121,15 @@ Returns
      
     ### Initial conditions at LSO
     # x0 is the vector with initial conditions. In this example, all quantities are fixed and not varied/fit in the MCMC.
-    x      = x0
-    nu_LSO = (c**3/(2*Pi*G*M*Ms))*((1 - e_LSO**2)/(6 + 2*e_LSO))**(3/2) 
+    x      = g.x0
+    nu_LSO = (g.c**3/(2*g.Pi*g.G*M*g.Ms)) * ((1 - g.e_LSO**2)/(6 + 2*g.e_LSO))**(3/2)
     # Notice that at each MC step the initial condition for nu_LSO needs to be updated since it depends on the central mass M.
     ###########
 
 
     # Solves the initial value problem with initial conditions = x0 and parameters = args.
     #sol_i = solve_ivp(eqs, (t_max, t_min), x0, method=solver0, t_eval = t_span, args=args, rtol=rtol, atol=atol)
-    sol_i = compute_orbit(args, x0)
+    sol_i = wf.compute_orbit(args, g.x0)
 
     #if sol_i.success == False: 
     if sol_i == 0: # Check that solution of ODEs exists without numerical issues.
@@ -139,8 +139,8 @@ Returns
    
     else:
         #waveform_i = waveform(n_max, M0, μ0, spin0, sol_i.t, sol_i.y)  # Compute the waveform
-        waveform_i = waveform(n_max, M0, μ0, spin0, sol_i[0],sol_i[1])  # Compute the waveform
-        FFT_i_gpu  = FFT_gpu(waveform_i[0], waveform_i[1])              # Compute the FFT of the waveform           
+        waveform_i = wf.waveform(g.n_max, g.M0, g.μ0, g.spin0, sol_i[0],sol_i[1])  # Compute the waveform
+        FFT_i_gpu  = wf.FFT_gpu(waveform_i[0], waveform_i[1])              # Compute the FFT of the waveform           
         FFT0_gpu   = fiducial_model[1]                                  # The FFT-values of the fiducial modes        
         FFT_i_gpu_0_j_noised = get_noise(FFT_i_gpu[0])                  # The LISA noise response evaluated on the frequency grid  
         
@@ -166,10 +166,10 @@ Returns
     # [4] Below, we use as example a redshift-dependent damping through the function dGW_Xi                                 #     (for more, see file 'propagation.py'.)  
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
     
-        L_gpu_vec = get_Likelihood( (dL(z)**(-1))*FFT0_gpu[1], (dGW_Xi(Xi, z)**(-1))*FFT_i_gpu[1], FFT_i_gpu_0_j_noised) # vectorised likelihood
+        L_gpu_vec = get_Likelihood( (prop.dL(g.z)**(-1))*FFT0_gpu[1], (prop.dGW_Xi(Xi, g.z)**(-1))*FFT_i_gpu[1], FFT_i_gpu_0_j_noised) # vectorised likelihood
          
         
-        temp_gpu = int_gpu(FFT_i_gpu[0][:], L_gpu_vec) # integrate over frequenciesc in the likelihood
+        temp_gpu = wf.int_gpu(FFT_i_gpu[0][:], L_gpu_vec) # integrate over frequenciesc in the likelihood
         temp_cpu = temp_gpu.get()                      # get the likelihood vector in cpu form 
         
         
