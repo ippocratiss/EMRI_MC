@@ -46,11 +46,10 @@ pip install --upgrade pip
 
 `source ~/.venvs/EMRI_MC/bin/activate`
 
-#WIP, so far exact list of dependencies in unclear.
+`pip install cupy emcee seaborn matplotlib pandas numpy emcee IPython ipykernel scipy h5py tqdm`
 
-note: install step `Running setup.py install for cupy ...` can take long time.
-
-`pip install cupy emcee seaborn matplotlib pandas numpy emcee IPython ipykernel scipy h5py`
+The install step `Running setup.py install for cupy ...` may take a considerable amount of time. 
+The packages related to interactive Python, such as `IPython` and `ipykernel`, are only needed for the example Jupyter notebooks and are not required by the underlying library.
 
 # Notes
 
