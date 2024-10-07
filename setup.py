@@ -5,7 +5,7 @@ setup(
     version='0.0.2',
     description='A GPU-based code for Bayesian inference of EMRI waveforms',
     url='https://github.com/ippocratiss/EMRI_MC',
-    author='Ippocratis Saltas',
+    author='Ippocratis Saltas, Roberto Oliveri',
     author_email='saltas@fzu.cz',
     license='Attribution-NonCommercial-ShareAlike 4.0 International',
     packages=find_packages(),
