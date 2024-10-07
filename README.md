@@ -1,4 +1,4 @@
-## EMRI\_MC: A GPU-based code for Bayesian inference of EMRI waveforms
+## emri\_mc: A GPU-based code for Bayesian inference of EMRI waveforms
 
 This is a code developed by **Ippocratis D. Saltas and Roberto Oliveri** to perfrom parameter inference for Extreme Mass Ratio Inspirals (EMRIs) including propagation effects. It is designed to run on GPUs. For more information we refer to:  
 
