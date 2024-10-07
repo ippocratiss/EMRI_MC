@@ -23,7 +23,7 @@ pip install .
 
 ### Runtime environment preparation
 
-Python - code was tested with #FIXME! python3.11. Make sure development package for given python version is installed too. Eg. at EL-like linux distros, `dnf install python3.11-devel`.
+Python - code was tested python3.11. Make sure development package for given python version is installed too. Eg. at EL-like linux distros, `dnf install python3.11-devel`.
 
 #### Ensure CUDA is present
 
