@@ -1,10 +1,10 @@
-# Installation of emri_mc using Python venv
+# Installation of EMRI_MC using Python venv
 
-EMRI_MC was tested on python 3.11 at system with NVIDIA A100 using NVIDIA CUDA 12.2.0. and cupy 13.3.
+EMRI_MC was tested on Python 3.11, on a system with NVIDIA A100 and using NVIDIA's cuda 12.2.0. and cupy 13.3.
 
 ## A. Installation using pip
 
-Make sure NVIDIA CUDA is available, install it or load it by `module load CUDA/12.2.0` if software management is available at your system. 
+Make sure NVIDIA's cuda is available, install it, or load it by `module load CUDA/12.2.0` if software management is available on your system. 
 
 (optional) create empty venv: `python3.11 -m venv ~/.venvs/emri_mc_prod` and activate it: `source ~/.venvs/emri_mc_prod/bin/activate`
 
@@ -23,11 +23,11 @@ pip install .
 
 ### Runtime environment preparation
 
-Python - code was tested with python3.11. Make sure development package for given python version is installed too. Eg. at EL-like linux distros, `dnf install python3.11-devel`.
+The code was tested with Python 3.11. Make sure the development package for given Python version is installed too. Eg. at EL-like Linux distributions, `dnf install python3.11-devel`.
 
 #### Ensure CUDA is present
 
-eg. at cluster environments, load CUDA toolkit. [^1]
+For example, on a cluster environment load the cuda toolkit. [^1]
 
 ```
 module load CUDA/12.2.0
