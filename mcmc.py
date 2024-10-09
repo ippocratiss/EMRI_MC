@@ -1,14 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import emri_mc.global_parameters.physics as g   # import global parameters and initial conditions
-import emri_mc.waveform as wf                   # import kludge equations and ODE solvers
-import emri_mc.propagation as prop
-
-#from propagation import *        # import GW propagation functions
-
+from global_parameters import *   
+from waveform import *           # import kludge equations and ODE solvers
+from propagation import *        # import GW propagation functions
 import numpy as np
 import cupy as cp 
+
 
 
 # Definition of the prior. We choose a flat prior.
@@ -17,27 +15,27 @@ def lnprior(p):
     """
     Defines the log-prior.
 
-    Parameters
-    ----------
-    p : 1D array, parameter values, p = [M, μ, spin, ...]
+Parameters
+----------
+p : 1D array, parameter values, p = [M, μ, spin, ...]
 
-    Returns
-    -------
-    real, log(prior)
-    """
-    x, y, z, w = p
-    # x: mass M, y: mass μ, z: spin S, w: Xi. 'Xi' is an example modified gravity parameter we use
-    # (see 'propagation.py' for its definition).
-    if (
-        10**5 <= x <= 10**7
-        and 1 <= y <= 100
-        and 0 <= z <= 1.0
-        and -100 <= w <= 100
-    ):
-        return 0
+Returns
+-------
+real, log(prior) 
+    """  
+    x, y, z, w = p 
+# x: mass M, y: mass μ, z: spin S, w: Xi. 'Xi' is an example modified gravity parameter we use 
+# (see 'propagation.py' for its definition). 
+    if ( 
+                    10**5  <= x <=   10**7 
+        and             1  <= y <=   100
+        and             0  <= z <=   1.0
+        and          -100  <= w <= 100
+        ):              
+        return 0   
     else:
-        return -np.inf
-###########
+                return -np.inf
+########### 
 
 
 # Definition of the log-likelihood. By construction, it is infinite outside the margins of our parameter space.
@@ -46,23 +44,78 @@ def lnprob(p):
     """
     Defines the log-posterior probability function for the MCMC run. 
 
-    Parameters
-    ----------
-    p : 1D array, parameter values, p = [M, μ, spin, ...]
+Parameters
+----------
+p : 1D array, parameter values, p = [M, μ, spin, ...]
 
-    Returns
-    -------
-    real, log(prior) + log(likelihood) 
+Returns
+-------
+real, log(prior) + log(likelihood) 
     """   
-    x, y, z, w     = p                            # Change this vector of parameters if needed.
-    fiducial_model = wf.compute_fiducial(g.x0,g.p0)      # This is needed to evaluate the function iterate_mcmc()
+    #x, y, z, w     = p                            # Change this vector of parameters if needed.
+    #fiducial_model = compute_fiducial(x0,p0)      # This is needed to evaluate the function iterate_mcmc()
     #print('[', p[0],',',p[1],',',p[2], ',' ,']') # Prints out the chosen parameters at each MCMC step.
     if not np.isfinite(lnprior(p)):               # Check prior's boundaries 
         return -np.inf
-    return lnprior(p) + iterate_mcmc(g.x0, p, fiducial_model) # returns log(prob) = ln(prior) + ln(likelihood)
+    return lnprior(p) + iterate_mcmc(x0, p, fiducial_model) # returns log(prob) = ln(prior) + ln(likelihood)
 ################## 
 
+def lnprior_vec(P):
+    """
+    Defines the log-prior.
 
+Parameters
+----------
+p : 2D array, parameter values, p x N_walkers
+
+Returns
+-------
+real, log(prior) 
+    """  
+    lnprior = []     
+
+    
+#    x, y, z, w = p 
+# x: mass M, y: mass μ, z: spin S, w: Xi. 'Xi' is an example modified gravity parameter we use 
+# (see 'propagation.py' for its definition).
+    for i in range(0,len(P)):
+        if (
+                        10**5  <= P[i][0] <=   10**7 
+            and             1  <= P[i][1] <=   100
+            and             0  <= P[i][2] <=   1.0
+            and          -100  <= P[i][3]  <=   100
+           
+           ):
+            lnprior.append(0) 
+        else:
+            lnprior.append(-np.inf)
+    lnprior = np.array(lnprior)
+    
+    return lnprior
+    
+        
+def lnprob_vec(P):
+    """
+    Defines the log-posterior probability function for the MCMC run. 
+
+Parameters
+---------- 
+P : 2D array, parameter values, p x N_walkers 
+      
+Returns 
+-------
+real, log(prior) + log(likelihood) 
+    """   
+    lnprob = []     
+    lnprior_P = lnprior_vec(P)
+    
+    for i in range(0,len(P)):
+        if not np.isfinite(lnprior_P[i]):
+            lnprob.append(-np.inf) 
+        lnprob.append(lnprior_P[i] + iterate_mcmc(x0, P[i], fiducial_model)) 
+        
+    lnprob = np.array(lnprob)
+    return lnprob
 
 # This is the detector noise as in "noise(f)", re-written for GPU/cuda parallelisation. It is used in the MCMC. It # takes as input a frequency and returns the noise value for LISA. See Barrack&Cutler2004. For a more recent 
 # expression for the noise function see below.
@@ -77,6 +130,7 @@ get_noise = cp.ElementwiseKernel(
         ''',
         'get_noise'
     )
+
 
 
 # This function takes as input the FFT values of 2 waveforms, together with a noise function, and returns the log-likelihood as: log-likelihood = (-0.5)*(waveform1 - waveform2)^2/noise. 
@@ -106,7 +160,7 @@ p : 1D array, parameter values at each step of the MCMC run. They are provided b
 fiducial_model: 2D array, fiducial model as produced by the function compute_fiducial().
 Returns
 -------
-2D array, [amplitude of waveform, FFT of amplitude of waveform] 
+real, log-likelihood at the parameter vector p
     """   
     np.seterr(divide='ignore')
     
@@ -121,15 +175,15 @@ Returns
      
     ### Initial conditions at LSO
     # x0 is the vector with initial conditions. In this example, all quantities are fixed and not varied/fit in the MCMC.
-    x      = g.x0
-    nu_LSO = (g.c**3/(2*g.Pi*g.G*M*g.Ms)) * ((1 - g.e_LSO**2)/(6 + 2*g.e_LSO))**(3/2)
+    x      = x0
+    nu_LSO = (c**3/(2*Pi*G*M*Ms))*((1 - e_LSO**2)/(6 + 2*e_LSO))**(3/2) 
     # Notice that at each MC step the initial condition for nu_LSO needs to be updated since it depends on the central mass M.
     ###########
 
 
     # Solves the initial value problem with initial conditions = x0 and parameters = args.
     #sol_i = solve_ivp(eqs, (t_max, t_min), x0, method=solver0, t_eval = t_span, args=args, rtol=rtol, atol=atol)
-    sol_i = wf.compute_orbit(args, g.x0)
+    sol_i = compute_orbit(args, x0)
 
     #if sol_i.success == False: 
     if sol_i == 0: # Check that solution of ODEs exists without numerical issues.
@@ -139,10 +193,12 @@ Returns
    
     else:
         #waveform_i = waveform(n_max, M0, μ0, spin0, sol_i.t, sol_i.y)  # Compute the waveform
-        waveform_i = wf.waveform(g.n_max, g.M0, g.μ0, g.spin0, sol_i[0],sol_i[1])  # Compute the waveform
-        FFT_i_gpu  = wf.FFT_gpu(waveform_i[0], waveform_i[1])              # Compute the FFT of the waveform           
+        waveform_i = waveform(n_max, M0, μ0, spin0, sol_i[0],sol_i[1])  # Compute the waveform
+        FFT_i_gpu  = FFT_gpu(waveform_i[0], waveform_i[1])              # Compute the FFT of the waveform           
         FFT0_gpu   = fiducial_model[1]                                  # The FFT-values of the fiducial modes        
-        FFT_i_gpu_0_j_noised = get_noise(FFT_i_gpu[0])                  # The LISA noise response evaluated on the frequency grid  
+       
+        FFT_i_gpu_0_j_noised = noise  # The LISA noise response evaluated on the frequency grid  
+         #FFT_i_gpu_0_j_noised = get_noise(FFT_i_gpu[0])                 
         
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
     #  L_gpu_vec is a GPU-vectorised likelihood. 
@@ -166,10 +222,10 @@ Returns
     # [4] Below, we use as example a redshift-dependent damping through the function dGW_Xi                                 #     (for more, see file 'propagation.py'.)  
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
     
-        L_gpu_vec = get_Likelihood( (prop.dL(g.z)**(-1))*FFT0_gpu[1], (prop.dGW_Xi(Xi, g.z)**(-1))*FFT_i_gpu[1], FFT_i_gpu_0_j_noised) # vectorised likelihood
+        L_gpu_vec = get_Likelihood( (dL(z)**(-1))*FFT0_gpu[1], (dGW_Xi(Xi, z)**(-1))*FFT_i_gpu[1], FFT_i_gpu_0_j_noised) # vectorised likelihood
          
         
-        temp_gpu = wf.int_gpu(FFT_i_gpu[0][:], L_gpu_vec) # integrate over frequenciesc in the likelihood
+        temp_gpu = int_gpu(FFT_i_gpu[0][:], L_gpu_vec) # integrate over frequenciesc in the likelihood
         temp_cpu = temp_gpu.get()                      # get the likelihood vector in cpu form 
         
         
@@ -177,6 +233,14 @@ Returns
         
         return log_likelihood_j                        # return log(likelihood)
 ##################
+
+###### Define the fiducial model to be used in the MCMC analysis. 
+#      It is defined globally based on the choices for x0 and p0 (defined in global_parameters.py).
+fiducial_model = compute_fiducial(x0,p0) 
+
+###### Define the noise curve to be used in the likelihood. 
+#      It is defined globally based on the frequency grid of the fiducial model's FFT.
+noise = get_noise(fiducial_model[1][0]) 
 
 
 ###### This is a more recent noise function according to XXXX. It can be implemented in a similar fashion
