@@ -20,7 +20,7 @@ The code was developed predominantly by Ippocratis D. Saltas and Roberto Oliveri
 
 **waveform.py**: This module defines the set of kludge ODE equations, the waveform generator, and some GPU-related functionality.
 
-**mcmc.py**: This module defines the MCMC-related functions and the MCMC iterator.
+**mcmc.py**: This module defines the MCMC-related functions and the MCMC iterator, including the prior and log-probability function.
 
 **propagation.py**: This module defines the functions needed for the propagation of the GW wave through the cosmological background in the presence of any modified gravity effects. 
 
