@@ -17,6 +17,7 @@
 ###### Libraries
 import numpy as np
 import math
+import subprocess
 
 class color: # useful for printing out text in colour.
     PURPLE    = '\033[1;35;48m'
@@ -24,11 +25,23 @@ class color: # useful for printing out text in colour.
     BOLD      = '\033[1;37;48m'
     BLUE      = '\033[1;34;48m'
     GREEN     = '\033[1;32;48m'
-    YELLOW    = '\033[1;33;48m'
+    YELLOW    = '\033[1;33;48m' 
     RED       = '\033[1;31;48m'
     BLACK     = '\033[1;30;48m'
     UNDERLINE = '\033[4;37;48m'
     END       = '\033[1;37;0m'
+
+
+def check_GPU():
+    """
+Checks GPU functionality.
+    """  
+    try:
+        subprocess.check_output('nvidia-smi')
+        print(color.GREEN + 'All is good, GPU detected.' + color.END)
+    
+    except Exception: 
+        print(color.RED + 'No GPU detected. The code cannot run at full functionality.' + color.END)
 ###### 
     
 

@@ -29,7 +29,7 @@ backend.reset(Nwalker, Ndim)
 if vectorize == True:
     sampler = emcee.EnsembleSampler(Nwalker, Ndim, lnprob_vec, backend=backend, vectorize = True)
     pos, prob, state = sampler.run_mcmc(p_init_MC, Nsteps, progress= True)
-        
+
 else: 
     multiprocessing.set_start_method('spawn', force=True)
     if __name__ == "__main__":
@@ -37,7 +37,6 @@ else:
         with Pool(processes = Nwalker) as pool:
             sampler = emcee.EnsembleSampler(Nwalker, Ndim, lnprob, backend=backend, pool = pool, vectorize = False)
             pos, prob, state = sampler.run_mcmc(p_init_MC, Nsteps, progress= True)
-
 
 ##### Use these for not-parallelised walkers. This makes the MCMC run slower.
 #sampler = emcee.EnsembleSampler(Nwalker, Ndim, lnp\rob, backend=backend)

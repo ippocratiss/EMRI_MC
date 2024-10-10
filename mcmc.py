@@ -100,11 +100,11 @@ def lnprob_vec(P):
 
 Parameters
 ---------- 
-P : 2D array, parameter values, p x N_walkers 
+P : 2D array, parameter values, N_dim x N_walkers 
       
 Returns 
 -------
-real, log(prior) + log(likelihood) 
+1D array, log(prior) + log(likelihood) 
     """   
     lnprob = []     
     lnprior_P = lnprior_vec(P)
@@ -115,10 +115,9 @@ real, log(prior) + log(likelihood)
         lnprob.append(lnprior_P[i] + iterate_mcmc(x0, P[i], fiducial_model)) 
         
     lnprob = np.array(lnprob)
-    return lnprob
+    return lnprob 
 
-# This is the detector noise as in "noise(f)", re-written for GPU/cuda parallelisation. It is used in the MCMC. It # takes as input a frequency and returns the noise value for LISA. See Barrack&Cutler2004. For a more recent 
-# expression for the noise function see below.
+# This is the detector noise as in "noise(f)", re-written for GPU/cuda parallelisation. It is used in the MCMC. It takes as input a frequency and returns the noise value for LISA. See Barrack&Cutler2004. For a more recent  expression for the noise function see below.
 get_noise = cp.ElementwiseKernel(
         'T f',
         'T S',
@@ -132,21 +131,19 @@ get_noise = cp.ElementwiseKernel(
     )
 
 
-
 # This function takes as input the FFT values of 2 waveforms, together with a noise function, and returns the log-likelihood as: log-likelihood = (-0.5)*(waveform1 - waveform2)^2/noise. 
 # It is re-written for GPU parallelisation and it is used in the MCMC.
 get_Likelihood = cp.ElementwiseKernel(
-        'T FFT0_gpu_1_j, T FFT_i_gpu_1_j, T FFT_i_gpu_0_j_noised',
+        'T FFT0_gpu_1_j, T FFT_i_gpu_1_j, T FFT_gpu_noise',
         'T L_j',
         '''
-            L_j = (-0.5) * pow((FFT0_gpu_1_j - FFT_i_gpu_1_j) , 2.0 )/FFT_i_gpu_0_j_noised;
+            L_j = (-0.5) * pow((FFT0_gpu_1_j - FFT_i_gpu_1_j) , 2.0 )/FFT_gpu_noise;
         ''',
         'get_Likelihood'
     )
 
 
 
-## iterate_mcmc()
 def iterate_mcmc(x, p, fiducial_model):
     """
     Computes the waveform and its FFT for each step of the MCMC run, and returns the log-likelihood
@@ -197,8 +194,8 @@ real, log-likelihood at the parameter vector p
         FFT_i_gpu  = FFT_gpu(waveform_i[0], waveform_i[1])              # Compute the FFT of the waveform           
         FFT0_gpu   = fiducial_model[1]                                  # The FFT-values of the fiducial modes        
        
-        FFT_i_gpu_0_j_noised = noise  # The LISA noise response evaluated on the frequency grid  
-         #FFT_i_gpu_0_j_noised = get_noise(FFT_i_gpu[0])                 
+        FFT_gpu_noise = noise  # The LISA noise response evaluated on the frequency grid  
+        #FFT_gpu_noise = get_noise(FFT_i_gpu[0])                 
         
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
     #  L_gpu_vec is a GPU-vectorised likelihood. 
@@ -222,7 +219,7 @@ real, log-likelihood at the parameter vector p
     # [4] Below, we use as example a redshift-dependent damping through the function dGW_Xi                                 #     (for more, see file 'propagation.py'.)  
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
     
-        L_gpu_vec = get_Likelihood( (dL(z)**(-1))*FFT0_gpu[1], (dGW_Xi(Xi, z)**(-1))*FFT_i_gpu[1], FFT_i_gpu_0_j_noised) # vectorised likelihood
+        L_gpu_vec = get_Likelihood( (dL(z)**(-1))*FFT0_gpu[1], (dGW_Xi(Xi, z)**(-1))*FFT_i_gpu[1], FFT_gpu_noise) # vectorised likelihood
          
         
         temp_gpu = int_gpu(FFT_i_gpu[0][:], L_gpu_vec) # integrate over frequenciesc in the likelihood
