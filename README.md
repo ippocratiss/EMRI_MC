@@ -50,24 +50,7 @@ The cuda/cupy library provides the GPU functionality, emcee is the library with 
 
 EMRI_MC was tested on Python 3.11, on a system with NVIDIA A100 and using NVIDIA's cuda 12.2.0. and cupy 13.3.
 
-## A. Installation using pip
-
-Make sure NVIDIA's cuda is available, install it, or load it by `module load CUDA/12.2.0` if software management is available on your system. 
-
-(optional) create empty venv: `python3.11 -m venv ~/.venvs/emri_mc_prod` and activate it: `source ~/.venvs/emri_mc_prod/bin/activate`
-
-clone the repository:
-
-`git clone https://github.com/ippocratiss/EMRI_MC.git`
-
-cd there and install it:
-
-```
-cd EMRI_MC
-pip install .
-```
-
-## B. Manual Installation of EMRI_MC using Python venv
+## Manual Installation of EMRI_MC using Python venv
 
 ### Runtime environment preparation
 
