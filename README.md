@@ -12,7 +12,7 @@ EMRI\_MC performs parameter inference for Extreme Mass Ratio Inspirals (EMRIs) b
 
 - Collaborators: Josef Dvoracek and Stephane Ilic
 
-The code was developed predominantly by Ippocratis D. Saltas and Roberto Oliveri, with the invaluable contributions of Stephane Ilic and Josef Dvoracek on MCMC and parallelisation aspects. 
+The code was developed predominantly by Ippocratis D. Saltas and Roberto Oliveri, with the valuable contributions of Stephane Ilic and Josef Dvoracek on MCMC and parallelisation aspects. 
 
 ## Modules
 
