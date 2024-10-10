@@ -88,4 +88,4 @@ The packages related to interactive Python, such as `IPython` and `ipykernel`, a
 
 ## Execution
 
-Setting up all parameters as explained in the paper, one starts the notebook main.ipynb, and executes the cells (the code can also be executed through the terminal). This notebook serves as an example - it first computes and plots the fiducial model, and then starts the MCMC run around the chosen fiducial. The MCMC results are stored in a text file, please make sure the path is defined appropriately. 
+Setting up all parameters as explained in the paper, one starts the notebook main.ipynb, and executes the cells (the code can also be executed through the terminal). This notebook serves as an example - it first computes and plots the fiducial model, and then starts the MCMC run around the chosen fiducial. The MCMC results are stored in a text file, please make sure the path is defined appropriately. The modifications needed in order to extend the parameter space, or include new effects is described in the paper.
